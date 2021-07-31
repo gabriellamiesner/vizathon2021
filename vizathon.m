@@ -17,8 +17,8 @@ opts = setvaropts(opts, "title", "WhitespaceRule", "preserve");
 opts = setvaropts(opts, ["title", "binary"], "EmptyFieldRule", "auto");
 
 % Import the data
-bechdel = readtable("C:\Users\aruni\OneDrive\Documents\testdata.csv", opts)
-[totalGross, intGross, domGross, budget, binary, title, year] = readvars('C:\Users\aruni\OneDrive\Documents\testdata.csv');
+bechdel = readtable("testdata.csv", opts)
+[totalGross, intGross, domGross, budget, binary, title, year] = readvars('test.data');
 whos  totlaGross intGross domGross budget binary title year
 %print(bechdel.totalGross)
 %plot(bechdel.X, bechdel.Y)
