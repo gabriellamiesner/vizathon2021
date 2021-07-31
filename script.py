@@ -1,6 +1,14 @@
+import matplotlib
+import seaborn as sns
 import pandas as pd
+from matplotlib import pyplot as plt 
+import dash_core_components as dcc
+import dash_html_components as html
+# from matplotlib.animation import FuncAnimation 
+
 data = pd.read_csv('data.csv')
-twentytwenty = pd.read('2020.csv')
+cpi = pd.read_csv('inflation.csv')
+# twentytwenty = pd.read('2020.csv')
 
 years = []
 years_count = []
@@ -9,6 +17,7 @@ avg_budget = []
 percent_passed = []
 total_budget = []
 total_income = []
+inflation_avg_budget =[]
 
 for i in data['year']: 
     if i not in years:
@@ -18,6 +27,7 @@ for i in data['year']:
         total_budget.append(0)
         percent_passed.append(0)
         total_income.append(0)
+        avg_budget.append(0)
     else: 
         index = years.index(i, 0, len(years))
         years_count[index] += 1 
@@ -55,8 +65,19 @@ percent_passed = [m / n for m, n in zip(num_passed, years_count)]
 percent_passed = [p * 100 for p in percent_passed]
 percent_passed = [int(round(p, 0)) for p in percent_passed]
 
+# 1970 Price x (2011 CPI / 1970 CPI) = 2011 Price
+count_avg = -1
+cpi_2020 = len(cpi['cpi']) -1 
+for dollar in total_budget:
+    count_avg +=1
+    avg_budget[count_avg] = dollar / years_count[count_avg]
 
-print(num_passed)
-print(years_count)
-print(percent_passed)
-print(total_income)
+count_cpi = -1 
+for cost in avg_budget: 
+    count_cpi += 1
+    t = float(cpi['cpi'][cpi_2020] / cpi['cpi'][count_cpi])
+    inflation_avg_budget.append(cost * t)
+
+avg_budget = [int(round(dummy, 0)) for dummy in avg_budget]
+inflation_avg_budget = [int(round(dumb, 0)) for dumb in inflation_avg_budget]
+
