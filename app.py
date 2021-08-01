@@ -60,29 +60,22 @@ for grade in data['binary']:
   if grade.__eq__("PASS"): 
         num_passed[index_binary] += 1
 
-# loops thru budget column in csv 
-# count_budget is used to keep track of index number
-# element_budget keeps track of the year that the current value was released in 
-# index_budget keeps track of the index of the year the movie was released in, so that: 
-# the amount the budget is added to the total_budget of all movies released that year 
-count_budget = -1
-for budget in data['budget']:
-  count_budget += 1
-  element_budget = data['year'][count_budget]
-  index_budget = years.index(element_budget, 0, len(years))
-  total_budget[index_budget] += budget
+# loops thru data_input column in csv 
+# count is used to keep track of index number
+# element keeps track of the year that the current value was released in 
+# index keeps track of the index of the year the movie was released in, so that: 
+# the amount the money is added to the end list of all movies released that year 
+def total(data_input, total):
+    count = -1
+    for x in data_input:
+        count += 1
+        element = data['year'][count]
+        index = years.index(element, 0, len(years))
+        total[index] += x
 
-# loops thru domestic gross column in csv
-# count_domestic is used to keep track of index number
-# element_domestic keeps track of the year that the current value was released in 
-# index_domestic keeps track of the index of the year the movie was released in, so that: 
-# revenue for that particular film can be added to the total revenue for the whole year  
-count_domestic = -1
-for revenue in data['domgross']:
-    count_domestic += 1 
-    element_domestic = data['year'][count_domestic]
-    index_domestic = years.index(element_domestic, 0, len(years))
-    domestic[index_domestic] += revenue
+# calling function on budget and domgross csv columns
+total(data['budget'], total_budget)
+total(data['domgross'], domestic)
 
 # reverses the values of all the lists so that they are in chronilogical order 
 total_budget.reverse()
@@ -100,21 +93,17 @@ percent_passed = [m / n for m, n in zip(num_passed, years_count)]
 percent_passed = [p * 100 for p in percent_passed]
 percent_passed = [int(round(p, 0)) for p in percent_passed]
 
-# loops thru each year's total budget 
-# count_avg_budget keeps track of index number
-# total_budget is divided by total number of films at the count_avg_budget index and then appended to the avg_budget list
-count_avg_budget = -1
-for money in total_budget: 
-    count_avg_budget += 1 
-    avg_budget.append(money/ years_count[count_avg_budget])
+# loops thru each year's total money 
+# count_average keeps track of index number
+# original is divided by total number of films at the count_average index and then appended to the average list
+def average(original, average):
+    count_average = -1
+    for y in original:
+        count_average += 1
+        average.append(y / years_count[count_average])
 
-# loops thru each year's total revenue 
-# count_avg_domestic keeps track of index number
-# domestic is divided by total number of films at the count_avg_domestic index and then appended to the avg_domestic list
-count_avg_domestic = -1
-for money_made in domestic: 
-    count_avg_domestic += 1
-    avg_domestic.append(money_made/ years_count[count_avg_domestic])
+average(domestic, avg_domestic)
+average(total_budget, avg_budget)
 
 # assigns decade label to each movie, to make classification on charts easier 
 for color in years:
@@ -168,7 +157,7 @@ count_2020 = 0
 for eight in twenty['binary']:
     if eight == "PASS":
         count_2020 +=1
-        
+
 percent_passed_2020 = count_2020/len(twenty['binary'])
 
 
