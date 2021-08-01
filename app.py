@@ -17,6 +17,7 @@ server = app.server
 # see https://plotly.com/python/px-arguments/ for more options
 data = pd.read_csv('data.csv')
 cpi = pd.read_csv('inflation.csv')
+twenty = pd.read_csv('2020.csv')
 
 years = []
 years_count = []
@@ -115,7 +116,11 @@ for u in avg_domestic:
     i9 = float(cpi['cpi'][cpi_2020] / cpi['cpi'][count_cpi_domestic])
     domestic_inflation.append(int(round(i9*u, 0)))
 
-# print(inflation_avg_budget[0])
+count_2020 = 0
+for eight in twenty['binary']:
+    if eight == "PASS":
+        count_2020 +=1
+print(count_2020/len(twenty['binary']))
 # avg_budget = [int(round(dummy, 0)) for dummy in avg_budget]
 
 df = pd.DataFrame({
@@ -136,7 +141,7 @@ df3 = pd.DataFrame({
     " ": colors
 })
 
-fig = px.line(df, x="Year", y="Percent Passed", title = "Percent of Movies that Passed the Bechdel Test by Year")
+fig = px.line(df, x="Year", y="Percent Passed", title = "One Step Forward, Two Steps Back")
 fig.update_traces(line_color='pink', hovertemplate = '<b>%{x}</b> <br> Percent Passed: %{y}%')
 
 fig2 = px.scatter(df2, x = "Average Budget (in USD), adjusted for inflation", y = "Percent Passed", title = "How Much Hollywood Values Women", color = " ")
@@ -161,6 +166,10 @@ app.layout = html.Div(children=[
         id='example-graph',
         figure=fig
     ),
+
+    html.Div(children = '''
+    ** There is a clear outlier in 1970 because there was only one movie in the dataset from that year. **
+    '''),
 
     dcc.Graph(
         id = 'example-graph2', 
